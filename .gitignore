@@ -1,0 +1,20 @@
+# Dependências instaladas localmente
+node_modules/
+.pnpm-store/
+
+# Artefatos gerados pelo build
+dist/
+
+# Configurações locais e segredos
+.env
+
+# Bancos SQLite locais
+*.db
+*.db-*
+
+# Relatórios e resultados de testes
+test-results/
+playwright-report/
+
+# Arquivos do sistema operacional
+.DS_Store

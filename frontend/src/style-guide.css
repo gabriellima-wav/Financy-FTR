@@ -1,0 +1,51 @@
+:root {
+  --brand: #1f6f43;
+  --brand-hover: #124b2b;
+  --text: #111827;
+  --muted: #4b5563;
+  --quiet: #6b7280;
+  --border: #e5e7eb;
+  --input: #d1d5db;
+  --bg: #f8f9fa;
+  --danger: #ef4444;
+  --success: #19ad70;
+  font-family: 'Inter Variable', Inter, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 16px;
+}
+.green {
+  --dark: #15803d;
+  --light: #e0fae9;
+  --solid: #16a34a;
+}
+.blue {
+  --dark: #1d4ed8;
+  --light: #dbeafe;
+  --solid: #2563eb;
+}
+.purple {
+  --dark: #7e22ce;
+  --light: #f3e8ff;
+  --solid: #9333ea;
+}
+.pink {
+  --dark: #be185d;
+  --light: #fce7f3;
+  --solid: #db2777;
+}
+.red {
+  --dark: #b91c1c;
+  --light: #fee2e2;
+  --solid: #dc2626;
+}
+.orange {
+  --dark: #c2410c;
+  --light: #ffedd5;
+  --solid: #ea580c;
+}
+.yellow {
+  --dark: #a16207;
+  --light: #f7f3ca;
+  --solid: #ca8a04;
+}

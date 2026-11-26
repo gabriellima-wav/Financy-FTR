@@ -1,0 +1,95 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+type Category {
+  color: String!
+  description: String!
+  icon: String!
+  id: ID!
+  title: String!
+}
+
+input CategoryInput {
+  color: String!
+  description: String
+  icon: String!
+  title: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  createCategory(data: CategoryInput!): Category!
+  createTransaction(data: TransactionInput!): Transaction!
+  deleteCategory(id: ID!): Boolean!
+  deleteTransaction(id: ID!): Boolean!
+  login(data: LoginInput!): AuthPayload!
+  register(data: RegisterInput!): AuthPayload!
+  requestPasswordReset(data: RecoveryInput!): Boolean!
+  resetPassword(data: ResetInput!): Boolean!
+  updateCategory(data: CategoryInput!, id: ID!): Category!
+  updateProfile(data: ProfileInput!): User!
+  updateTransaction(data: TransactionInput!, id: ID!): Transaction!
+}
+
+input ProfileInput {
+  name: String!
+}
+
+type Query {
+  listCategories: [Category!]!
+  listTransactions: [Transaction!]!
+  me: User!
+}
+
+input RecoveryInput {
+  email: String!
+}
+
+input RegisterInput {
+  email: String!
+  name: String!
+  password: String!
+}
+
+input ResetInput {
+  password: String!
+  token: String!
+}
+
+type Transaction {
+  amountCents: Int!
+  category: Category!
+  date: String!
+  description: String!
+  id: ID!
+  type: TransactionType!
+}
+
+input TransactionInput {
+  amountCents: Int!
+  categoryId: ID!
+  date: String!
+  description: String!
+  type: TransactionType!
+}
+
+enum TransactionType {
+  EXPENSE
+  INCOME
+}
+
+type User {
+  email: String!
+  id: ID!
+  name: String!
+}
