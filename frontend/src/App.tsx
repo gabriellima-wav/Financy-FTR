@@ -13,7 +13,6 @@ import { Transactions } from './pages/Transactions'
 import { Categories } from './pages/Categories'
 import { Profile } from './pages/Profile'
 import { Auth } from './pages/Auth'
-import { mockData } from './lib/mockData'
 type Editor =
   | { kind: 'category'; item?: Category }
   | { kind: 'transaction'; item?: Transaction }
@@ -159,81 +158,6 @@ function FinanceApp({ session }: { session: string }) {
     </>
   )
 }
-function PreviewApp() {
-  const [editor, setEditor] = useState<Editor | null>(null)
-  const close = () => setEditor(null)
-  const data = mockData
-  return (
-    <>
-      <div className="demo-banner">
-        Prévia visual com os dados do Figma. Alterações não são salvas.
-        <Link to="/">Sair da prévia</Link>
-      </div>
-      <header className="navbar">
-        <div className="nav-inner">
-          <Link to="/demo" aria-label="Financy">
-            <img src="/Logo.svg" alt="Financy" width="100" height="24" />
-          </Link>
-          <nav>
-            {[
-              ['/demo', 'Dashboard'],
-              ['/demo/transacoes', 'Transações'],
-              ['/demo/categorias', 'Categorias'],
-            ].map(([path, title]) => (
-              <NavLink key={path} end to={path}>
-                {title}
-              </NavLink>
-            ))}
-          </nav>
-          <Link className="avatar" aria-label="Perfil" to="/demo/perfil">
-            CT
-          </Link>
-        </div>
-      </header>
-      <main className="workspace">
-        <Routes>
-          <Route
-            path="/demo"
-            element={<Dashboard data={data} create={() => setEditor({ kind: 'transaction' })} />}
-          />
-          <Route
-            path="/demo/transacoes"
-            element={
-              <Transactions
-                data={data}
-                create={() => setEditor({ kind: 'transaction' })}
-                edit={(item) => setEditor({ kind: 'transaction', item })}
-                remove={(item) => setEditor({ kind: 'deleteTransaction', id: item.id, name: item.description })}
-              />
-            }
-          />
-          <Route
-            path="/demo/categorias"
-            element={
-              <Categories
-                data={data}
-                create={() => setEditor({ kind: 'category' })}
-                edit={(item) => setEditor({ kind: 'category', item })}
-                remove={(item) => setEditor({ kind: 'deleteCategory', id: item.id, name: item.title })}
-              />
-            }
-          />
-          <Route path="/demo/perfil" element={<Profile user={data.me} />} />
-          <Route path="*" element={<Navigate to="/demo" replace />} />
-        </Routes>
-      </main>
-      {editor?.kind === 'category' && <CategoryForm item={editor.item} close={close} />}
-      {editor?.kind === 'transaction' && (
-        <TransactionForm item={editor.item} categories={data.listCategories} close={close} newCategory={() => setEditor({ kind: 'category' })} />
-      )}
-      {editor && 'id' in editor && (
-        <Modal title="Prévia somente para leitura" description="Esta prévia não grava nem exclui dados. Entre na sua conta para testar operações." close={close}>
-          <Button onClick={close}>Fechar</Button>
-        </Modal>
-      )}
-    </>
-  )
-}
 export function App() {
   const session = useSyncExternalStore(subscribe, token)
   const cache = useQueryClient()
@@ -247,7 +171,6 @@ export function App() {
     <FinanceApp key={session} session={session} />
   ) : (
     <Routes>
-      <Route path="/demo/*" element={<PreviewApp />} />
       <Route path="/" element={<Auth key="login" />} />
       <Route path="/cadastro" element={<Auth key="register" signup />} />
       <Route path="*" element={<Navigate to="/" replace />} />
