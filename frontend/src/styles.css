@@ -376,6 +376,98 @@ legend {
   color: #b91c1c;
   font-size: 13px;
 }
+.toast-viewport {
+  position: fixed;
+  z-index: 100;
+  right: 16px;
+  bottom: 16px;
+  width: min(360px, calc(100vw - 32px));
+  outline: 0;
+}
+.toast {
+  --toast-gap: 10px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: calc(1000 - var(--toast-index));
+  width: 100%;
+  border: 1px solid var(--border);
+  border-left: 4px solid #2563eb;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 12px 30px rgb(17 24 39 / 16%);
+  transform: translateX(var(--toast-swipe-movement-x))
+    translateY(calc(var(--toast-swipe-movement-y) - (var(--toast-index) * var(--toast-gap))));
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+.toast[data-type='success'] {
+  border-left-color: var(--success);
+}
+.toast[data-type='error'] {
+  border-left-color: #dc2626;
+}
+.toast[data-starting-style],
+.toast[data-ending-style] {
+  opacity: 0;
+  transform: translateX(calc(var(--toast-swipe-movement-x) + 24px));
+}
+.toast[data-limited] {
+  display: none;
+}
+.toast-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+}
+.toast-indicator {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #2563eb;
+}
+.toast[data-type='success'] .toast-indicator {
+  background: #e0fae9;
+  color: #15803d;
+}
+.toast[data-type='error'] .toast-indicator {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.toast-message {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
+}
+.toast-title {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+.toast-description {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 18px;
+}
+.toast-close {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--quiet);
+}
+.toast-close:hover {
+  background: var(--bg);
+  color: var(--text);
+}
 .navbar {
   background: white;
   border-bottom: 1px solid var(--border);

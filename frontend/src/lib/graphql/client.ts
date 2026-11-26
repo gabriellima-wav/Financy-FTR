@@ -1,6 +1,8 @@
-import { ClientError, GraphQLClient } from 'graphql-request'
+import { GraphQLClient } from 'graphql-request'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { mutations } from './mutations'
+import { errorHandlerInterceptor } from './error-handler.interceptor'
+import { notify } from '../../components/ui/toast'
 const key = 'financy.session'
 export const token = () =>
   sessionStorage.getItem(key) || localStorage.getItem(key)
@@ -30,19 +32,26 @@ export async function request<T>(
   try {
     return await client.request<T>(document, variables)
   } catch (err) {
-    if (err instanceof ClientError) {
-      const error = err.response.errors?.[0]
-      if (
-        session &&
-        token() === session &&
-        error?.extensions?.code === 'UNAUTHENTICATED'
-      )
-        setToken()
-      throw new Error(error?.message || 'Falha ao concluir a operação')
-    }
-    throw new Error('Não foi possível conectar à API. Tente novamente.')
+    throw errorHandlerInterceptor(err, {
+      onUnauthenticated: () => {
+        if (session && token() === session) setToken()
+      },
+    })
   }
 }
+
+const successMessages: Record<keyof typeof mutations, string> = {
+  login: 'Login realizado com sucesso.',
+  register: 'Conta criada com sucesso.',
+  profile: 'Perfil atualizado com sucesso.',
+  createCategory: 'Categoria criada com sucesso.',
+  updateCategory: 'Categoria atualizada com sucesso.',
+  deleteCategory: 'Categoria excluída com sucesso.',
+  createTransaction: 'Transação criada com sucesso.',
+  updateTransaction: 'Transação atualizada com sucesso.',
+  deleteTransaction: 'Transação excluída com sucesso.',
+}
+
 export function useSave(action: keyof typeof mutations, done: () => void) {
   const cache = useQueryClient()
   return useMutation({
@@ -50,6 +59,7 @@ export function useSave(action: keyof typeof mutations, done: () => void) {
       request(mutations[action], variables),
     onSuccess: async () => {
       await cache.invalidateQueries({ queryKey: ['workspace'] })
+      notify.success({ title: successMessages[action] })
       done()
     },
   })
